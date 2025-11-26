@@ -1,0 +1,8 @@
+{
+  "name": "cordova-plugin-my-kotlin-plugin",
+  "version": "1.0.0",
+  "cordova": {
+    "id": "com.example.mykotlinplugin",
+    "platforms": ["android"]
+  }
+}

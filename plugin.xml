@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="cordova-plugin-my-kotlin"
+        version="1.0.0">
+    <name>MyKotlinPlugin</name>
+   
+    <js-module src="www/MyKotlinPlugin.js" name="MyKotlinPlugin">
+        <clobbers target="MyKotlinPlugin" />
+    </js-module>
+   
+    <platform name="android">
+        <!-- Location permissions including background -->
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+       
+        <!-- Kotlin dependencies -->
+        <framework src="org.jetbrains.kotlin:kotlin-stdlib:1.8.10" />
+        <framework src="org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10" />
+        <framework src="androidx.core:core-ktx:1.10.1" />
+        <framework src="com.google.android.gms:play-services-location:21.0.1" />
+
+       
+        <!-- Enable Kotlin compilation in build.gradle -->
+        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
+       
+        <!-- Copy the source files -->
+        <source-file src="src/android/MyKotlinPlugin.kt"
+                     target-dir="app/src/main/java/com/example/mykotlinplugin" />
+        <source-file src="src/android/LocationForegroundService.kt"
+                     target-dir="app/src/main/java/com/example/mykotlinplugin" />
+       
+        <!-- Register the plugin in config.xml -->
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="MyKotlinPlugin">
+                <param name="android-package" value="com.example.mykotlinplugin.MyKotlinPlugin" />
+            </feature>
+        </config-file>
+       
+        <!-- Add permissions to AndroidManifest.xml -->
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+        </config-file>
+        
+        <!-- Add service to AndroidManifest.xml application section -->
+        <config-file target="AndroidManifest.xml" parent="application">
+            <service android:name="com.example.mykotlinplugin.LocationForegroundService"
+                    android:exported="false"
+                    android:foregroundServiceType="location" />
+        </config-file>
+    </platform>
+    <platform name="ios">
+    <!-- add Swift source to plugin -->
+    <source-file src="src/ios/MyKotlinPlugin.swift" target-dir="MyKotlinPlugin" />
+    <!-- Ensure bridging header is available if needed; many Cordova installs compile Swift fine without -->
+    <!-- Add required Info.plist entries -->
+    <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
+        <string>App needs background location to track location for core functionality</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+        <string>App needs location access to track your location</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="UIBackgroundModes">
+        <array>
+            <string>location</string>
+            <string>fetch</string>
+        </array>
+    </config-file>
+   
+</platform>
+
+</plugin>
